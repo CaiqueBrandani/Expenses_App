@@ -1,5 +1,3 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace, deprecated_member_use, avoid_unnecessary_containers, dead_code
-
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
@@ -11,35 +9,38 @@ import 'models/transaction.dart';
 import 'components/chart.dart';
 import 'package:universal_platform/universal_platform.dart';
 
-main() => runApp(ExpenseApp());
+main() => runApp(const ExpenseApp());
 
 class ExpenseApp extends StatelessWidget {
+  const ExpenseApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     final ThemeData tema = ThemeData();
 
     return MaterialApp(
-      home: MyHomePage(),
+      debugShowCheckedModeBanner: false,
+      home: const MyHomePage(),
       theme: tema.copyWith(
-      colorScheme: tema.colorScheme.copyWith(
+        colorScheme: tema.colorScheme.copyWith(
           primary: Colors.teal,
           secondary: Colors.teal[200],
         ),
         textTheme: tema.textTheme.copyWith(
-          headline6: TextStyle(
+          titleLarge: const TextStyle(
             fontFamily: 'Quicksand',
             fontSize: 18 /* * MediaQuery.of(context).textScaleFactor */,
             color: Colors.black87,
             fontWeight: FontWeight.w600,
           ),
-          bodyText1: TextStyle(
+          bodyLarge: const TextStyle(
             fontFamily: 'Quicksand',
             fontSize: 18 /* * MediaQuery.of(context).textScaleFactor */,
             color: Colors.black87,
             fontWeight: FontWeight.w500,
           ),
         ),
-        appBarTheme: AppBarTheme(
+        appBarTheme: const AppBarTheme(
           titleTextStyle: TextStyle(
             fontFamily: 'Quicksand',
             fontSize: 20 /* * MediaQuery.of(context).textScaleFactor */,
@@ -53,18 +54,20 @@ class ExpenseApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
+
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  MyHomePageState createState() => MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _transactions = [];
   bool _showChart = false;
 
   List<Transaction> get _recentTransaction {
     return _transactions.where((tr) {
       return tr.date.isAfter(DateTime.now().subtract(
-        Duration(days: 7),
+        const Duration(days: 7),
       ));
     }).toList();
   }
@@ -138,13 +141,15 @@ class _MyHomePageState extends State<MyHomePage> {
           },
         ),
       _getIconButton(
-        UniversalPlatform.isIOS ? CupertinoIcons.shopping_cart : Icons.add_shopping_cart,
+        UniversalPlatform.isIOS
+            ? CupertinoIcons.shopping_cart
+            : Icons.add_shopping_cart,
         () => _openTransactionFormModal(context),
       ),
     ];
 
     final PreferredSizeWidget appBar = AppBar(
-      title: Text('Despesas Pessoais'),
+      title: const Text('Despesas Pessoais'),
       actions: actions,
     );
 
@@ -152,7 +157,7 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar.preferredSize.height -
         MediaQuery.of(context).padding.top;
 
-    final bodyPage = SafeArea( 
+    final bodyPage = SafeArea(
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -176,12 +181,12 @@ class _MyHomePageState extends State<MyHomePage> {
           ),*/
 
             if (_showChart || !isLandscape)
-              Container(
+              SizedBox(
                 height: availableHeight * (isLandscape ? 0.7 : 0.3),
                 child: Chart(_recentTransaction),
               ),
             if (!_showChart || !isLandscape)
-              Container(
+              SizedBox(
                 height: availableHeight * (isLandscape ? 1 : 0.7),
                 child: TransactionList(_transactions, _removeTransaction),
               ),
@@ -193,7 +198,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return UniversalPlatform.isIOS
         ? CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
-              middle: Text('Despesas Pessoais'),
+              middle: const Text('Despesas Pessoais'),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: actions,
@@ -207,7 +212,7 @@ class _MyHomePageState extends State<MyHomePage> {
             floatingActionButton: UniversalPlatform.isIOS
                 ? Container()
                 : FloatingActionButton(
-                    child: Icon(Icons.add_shopping_cart),
+                    child: const Icon(Icons.add_shopping_cart),
                     onPressed: () => _openTransactionFormModal(context),
                     backgroundColor: Theme.of(context).colorScheme.primary,
                   ),
